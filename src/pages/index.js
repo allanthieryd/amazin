@@ -1,8 +1,23 @@
+/* eslint-disable jsx-a11y/alt-text */
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useAuth } from '../context/AuthContext';
+import Link from "next/link";
+
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      console.log('Utilisateur non authentifié, redirection vers la page de connexion');
+      router.push('/login'); // Redirige vers la page de connexion si non authentifié
+    }
+  }, [isAuthenticated, router]);
   return (
     <div>
       {/* Header */}
@@ -21,7 +36,9 @@ export default function Home() {
 
         {/* Cart icon */}
         <div className="relative">
-          <FontAwesomeIcon icon={faCartShopping} className="h-6 w-6 text-white cursor-pointer" />
+          <Link href="/cart">
+            <FontAwesomeIcon icon={faCartShopping} className="h-6 w-6 text-white cursor-pointer" />
+          </Link>
           <span className="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full px-1">3</span>
         </div>
       </header>
